@@ -6,7 +6,7 @@ This module provides functions which manipulate disk quotas.
 
 SUPPORT ENVIRONMENT
 
-  * Linux 2.4 or later
+  * Linux 2.4.x
   * Solaris 2.6, 7, 8
   * FreeBSD, NetBSD (OpenBSD,.. ?)
 

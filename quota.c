@@ -1,5 +1,5 @@
 /* -*- C -*-
- * $Id: quota.c,v 1.1 2002/11/12 05:43:18 ttate Exp $
+ * $Id: quota.c,v 1.2 2003/02/13 07:49:36 ttate Exp $
  * Copyright (C) 2000 Takaaki Tateishi <ttate@jaist.ac.jp>
  */
 
@@ -29,8 +29,8 @@
 #  include <sys/quota.h>
 #endif
 #include <linux/version.h>
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,0)
-#  define USE_LINUX_QUOTA_24
+#ifdef DQF_MASK           /* for V0 quota format */
+#  define USE_LINUX_QUOTA_V0
 #  define uid_t qid_t
 #  define dqblk disk_dqblk
 #endif
@@ -146,10 +146,10 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
   get_uid(vuid, &uid, &is_gid);
   printf("cmd = %d, dev = %s, uid = %d, gid? = %d\n", cmd, dev, uid, is_gid);
   if( is_gid ){
-    return quotactl(QCMD(cmd,GRPQUOTA),dev,(qid_t)uid,addr);
+    return quotactl(QCMD(cmd,GRPQUOTA),dev,(uid_t)uid,addr);
   }
   else{
-    return quotactl(QCMD(cmd,USRQUOTA),dev,(qid_t)uid,addr);
+    return quotactl(QCMD(cmd,USRQUOTA),dev,(uid_t)uid,addr);
   };
 };
 #elif defined(USE_BSD_QUOTA) /* for *BSD */
@@ -235,7 +235,7 @@ rb_diskquota_get(VALUE dqb, struct dqblk * c_dqb)
 #if defined(USE_LINUX_QUOTA)
   c_dqb->dqb_bhardlimit = GetMember("bhardlimit");
   c_dqb->dqb_bsoftlimit = GetMember("bsoftlimit");
-#if !defined(USE_LINUX_QUOTA_24)
+#if !defined(USE_LINUX_QUOTA_V0)
   c_dqb->dqb_curblocks  = GetMember("curblocks");
 #endif
   c_dqb->dqb_ihardlimit = GetMember("ihardlimit");
@@ -274,7 +274,7 @@ rb_diskquota_new(struct dqblk *c_dqb)
   dqb = rb_struct_new(rb_sDiskQuota,
 		      UINT2NUM(c_dqb->dqb_bhardlimit),
 		      UINT2NUM(c_dqb->dqb_bsoftlimit),
-#if defined(USE_LINUX_QUOTA_24)
+#if defined(USE_LINUX_QUOTA_V0)
 		      UINT2NUM(c_dqb->dqb_curspace),
 #else
 		      UINT2NUM(c_dqb->dqb_curblocks),
@@ -454,7 +454,7 @@ Init_quota()
   DQ_ALIAS(fsoftlimit=, isoftlimit=);
   DQ_ALIAS(curfiles=,   curinodes=);
   DQ_ALIAS(ftimelimit=, itimelimit=);
-#if defined(USE_LINUX_QUOTA_24)
+#if defined(USE_LINUX_QUOTA_V0)
   DQ_ALIAS(curspace, curblocks);
   DQ_ALIAS(curspace=, curblocks=);
 #endif
