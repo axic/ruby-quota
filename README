@@ -1,0 +1,37 @@
+Ruby/Quota
+
+-------------------------------------------------------------------------------
+This module provides functions which manipulate disk quotas.
+-------------------------------------------------------------------------------
+
+SUPPORT ENVIRONMENT
+
+  * Linux 2.4 or later
+  * Solaris 2.6, 7, 8
+  * FreeBSD, NetBSD (OpenBSD,.. ?)
+
+-------------------------------------------------------------------------------
+
+SYNOPSIS
+
+Quota::GroupID.new(id)
+Quota::GroupID[id]
+Quota::UserID.new(id)
+Quota::UserID[id]
+Quota.quotaon(dev, quotas)
+Quota.quotaoff(dev)
+Quota.getquota(dev, uid)
+Quota.setquota(dev, uid, dq)
+Quota.setqlim(dev, uid, dq) # *BSD does not have this function.
+Quota.sync(dev)
+
+  * 'dev' is a device file or a mount point (e.g. /dev/hda0, /mnt/foo). On *
+    BSD, this library try to find a mounted directory from a given filesystem
+    using getmntinfo().
+  * 'quotas' is a quotas file.
+  * 'uid' is an integer value, an user id or a group id. If it is an integer,
+    it is treated as an user id.
+  * 'dq' is an entry of the quotas. its members are same as 'dqblk' structure
+    (e.g. dqb_curblocks => dq.curblocks). see also the quotactl man pages and
+    header files (e.g. linux/quota.h).
+

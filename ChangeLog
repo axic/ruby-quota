@@ -1,0 +1,62 @@
+Sat Mar 30 15:01:12 UTC 2002 Takaaki Tateishi <ttate@kt.jaist.ac.jp>
+
+	* version 0.5.1
+
+Sat Mar 30 14:59:04 UTC 2002 Takaaki Tateishi <ttate@kt.jaist.ac.jp>
+
+	* The memory allocated by getmntinfo() should not be free()'d
+	  by Ruby/Quota on FreeBSD and NetBSD.
+
+Fri Mar 29 04:42:06 UTC 2002 Takaaki Tateishi <ttate@kt.jaist.ac.jp>
+
+	* version 0.5.0.
+
+Thu Mar 21 18:57:34 UTC 2002 Takaaki Tateishi <ttate@kt.jaist.ac.jp>
+
+	* A memory allocated by getmntinfo() should be free()'d.
+
+Thu Mar 21 18:54:38 UTC 2002 Kambe Takahiro <taca@sky.yamashina.kyoto.jp>
+
+	* Check on NetBSD and fix typos.
+
+Wed Mar 20 18:32:57 UTC 2002 Takaaki Tateishi <ttate@kt.jaist.ac.jp>
+	* Use "struct disk_dqblk" defined in linux/quota.h on linux-2.4.
+	  The disk_dqblk has a "curspaces" and "id", however don't have
+	  "curblocks".
+
+	* Use "qid_t" instead of int or uid_t on linux-2.4.
+
+	* Add UserID and GroupID.
+
+	* Use getmntinfo() to obtain a mounted directory from a filesystem.
+
+Mon Mar 18 20:18:39 UTC 2002 Takaaki Tateishi <ttate@kt.jaist.ac.jp>
+	* version 0.4.1
+
+Mon Mar 18 19:36:30 UTC 2002 Takaaki Tateishi <ttate@kt.jaist.ac.jp>
+	* Use sys/quota.h if it exists.
+
+	* Add Quota::VERSION.
+
+Tue Jul 17 12:53:03 JST 2001 Takaaki Tateishi <ttate@jaist.ac.jp>
+	* version 0.4
+
+Thu Jul  5 22:29:06 JST 2001 Takaaki Tateishi <ttate@jaist.ac.jp>
+	* the DiskQuota has same structure members for Linux,BSD and Solaris.
+	  aliases of the itimelimit, isoftlimit, ihardlimit and curinodes
+	  are ftimelimit, fsoftlimit, fhardlimit and curfiles respectively
+
+Sun Jun 24 12:51:37 JST 2001 Takaaki Tateishi <ttate@jaist.ac.jp>
+	* version 0.3
+
+Sun Jun 24 12:21:30 JST 2001 Akinori MUSHA <knu@iDaemons.org>
+	* quota.c: support *bsd's quotactl.
+
+Sun Dec  3 22:35:34 JST 2000 Takaaki Tateishi <ttate@jaist.ac.jp>
+	* version 0.2
+
+Sun Dec  3 22:17:17 JST 2000 Takaaki Tateishi <ttate@jaist.ac.jp>
+	* quota.c (rb_quotactl): support linux's quotactl.
+
+Wed Nov 22 14:20:05 JST 2000 Takaaki Tateishi <ttate@jaist.ac.jp>
+	* version 0.1
