@@ -1,13 +1,18 @@
 /* -*- C -*-
- * $Id: quota.c,v 1.2 2003/02/13 07:49:36 ttate Exp $
- * Copyright (C) 2000 Takaaki Tateishi <ttate@jaist.ac.jp>
+ * $Id: quota.c,v 1.3 2004/08/25 16:27:50 ttate Exp $
+ * Copyright (C) 2000,2001,2002,2003,2004 Takaaki Tateishi <ttate@ttsky.net>
+ */
+
+/*
+ * TODO:
+ * - should use the allocation framework of ruby-1.8.x.
  */
 
 #include "ruby.h"
 
-#define RUBY_QUOTA_VERSION "0.5.2"
+#define RUBY_QUOTA_VERSION "0.6.0"
 
-#ifdef HAVE_LINUX_QUOTA_H       /* for linux-2.4.x */
+#ifdef HAVE_LINUX_QUOTA_H       /* for linux-2.4.x, 2.6.x */
 # define USE_LINUX_QUOTA
 #endif
 #ifdef HAVE_SYS_FS_UFS_QUOTA_H  /* for Solaris-2.6,7,8 */
@@ -18,6 +23,7 @@
 #endif
 
 #ifdef USE_LINUX_QUOTA
+#include <linux/version.h>
 #ifdef HAVE_LINUX_TYPES_H
 #  include <linux/types.h>
 #else
@@ -25,16 +31,16 @@
 #endif
 #ifdef HAVE_LINUX_QUOTA_H
 #  include <linux/quota.h>
+#  define uid_t qid_t
+#  if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
+#    define dqblk if_dqblk
+#  else
+#    define dqblk disk_dqblk
+#  endif
 #else
 #  include <sys/quota.h>
 #endif
-#include <linux/version.h>
-#ifdef DQF_MASK           /* for V0 quota format */
-#  define USE_LINUX_QUOTA_V0
-#  define uid_t qid_t
-#  define dqblk disk_dqblk
-#endif
-#endif
+#endif /* USE_LINUX_QUOTA */
 
 #ifdef USE_SOLARIS_QUOTA
 #include <sys/types.h>
@@ -235,7 +241,9 @@ rb_diskquota_get(VALUE dqb, struct dqblk * c_dqb)
 #if defined(USE_LINUX_QUOTA)
   c_dqb->dqb_bhardlimit = GetMember("bhardlimit");
   c_dqb->dqb_bsoftlimit = GetMember("bsoftlimit");
-#if !defined(USE_LINUX_QUOTA_V0)
+#if defined(HAVE_LINUX_QUOTA_H)
+  c_dqb->dqb_curspace   = GetMember("curspace");
+#else
   c_dqb->dqb_curblocks  = GetMember("curblocks");
 #endif
   c_dqb->dqb_ihardlimit = GetMember("ihardlimit");
@@ -274,7 +282,7 @@ rb_diskquota_new(struct dqblk *c_dqb)
   dqb = rb_struct_new(rb_sDiskQuota,
 		      UINT2NUM(c_dqb->dqb_bhardlimit),
 		      UINT2NUM(c_dqb->dqb_bsoftlimit),
-#if defined(USE_LINUX_QUOTA_V0)
+#if defined(HAVE_LINUX_QUOTA_H)
 		      UINT2NUM(c_dqb->dqb_curspace),
 #else
 		      UINT2NUM(c_dqb->dqb_curblocks),
@@ -454,7 +462,7 @@ Init_quota()
   DQ_ALIAS(fsoftlimit=, isoftlimit=);
   DQ_ALIAS(curfiles=,   curinodes=);
   DQ_ALIAS(ftimelimit=, itimelimit=);
-#if defined(USE_LINUX_QUOTA_V0)
+#if defined(HAVE_LINUX_QUOTA_H)
   DQ_ALIAS(curspace, curblocks);
   DQ_ALIAS(curspace=, curblocks=);
 #endif
