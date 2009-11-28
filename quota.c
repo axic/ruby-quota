@@ -61,6 +61,12 @@
 #if defined(SYS_UCRED_H)
 # include <sys/ucred.h>  /* required by NetBSD,FreeBSD */
 #endif
+#if defined(__DragonFly__)
+#  include <sys/param.h>
+#  if __DragonFly_version >= 160000
+#    define dqblk ufs_dqblk
+#  endif
+#endif
 #endif
 
 static VALUE rb_mQuota;
