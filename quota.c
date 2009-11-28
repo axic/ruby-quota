@@ -178,7 +178,11 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
   char *path;
   int is_gid;
   uid_t uid;
+#if defined(HAVE_SYS_STATVFS_H) && defined(__NetBSD__)
+  struct statvfs *buff;
+#else
   struct statfs *buff;
+#endif
   int i, count, ret;
   
   buff = 0;
