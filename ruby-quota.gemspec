@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = %q{ruby-quota}
-  s.version = "0.5.1"
+  s.version = "0.6.0"
   s.date = %q{2009-11-24}
   s.authors = ["Takaaki Tateishi"]
   s.email = %q{ttate@jaist.ac.jp}
