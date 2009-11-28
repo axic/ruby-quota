@@ -25,6 +25,9 @@
 #ifdef HAVE_UFS_UFS_QUOTA_H     /* for *BSD */
 # define USE_BSD_QUOTA
 #endif
+#ifdef __APPLE__
+# define USE_MACOSX_QUOTA
+#endif
 
 #ifdef USE_LINUX_QUOTA
 #include <linux/version.h>
@@ -268,7 +271,11 @@ rb_diskquota_get(VALUE dqb, struct dqblk * c_dqb)
 #elif defined(USE_BSD_QUOTA)
   c_dqb->dqb_bhardlimit = GetMember("bhardlimit");
   c_dqb->dqb_bsoftlimit = GetMember("bsoftlimit");
+#if defined(USE_MACOSX_QUOTA)
+  c_dqb->dqb_curbytes  = GetMember("curbytes");
+#else
   c_dqb->dqb_curblocks  = GetMember("curblocks");
+#endif
   c_dqb->dqb_ihardlimit = GetMember("ihardlimit");
   c_dqb->dqb_isoftlimit = GetMember("isoftlimit");
   c_dqb->dqb_curinodes  = GetMember("curinodes");
@@ -311,7 +318,11 @@ rb_diskquota_new(struct dqblk *c_dqb)
   dqb = rb_struct_new(rb_sDiskQuota,
 		      UINT2NUM(c_dqb->dqb_bhardlimit),
 		      UINT2NUM(c_dqb->dqb_bsoftlimit),
+#if defined(USE_MACOSX_QUOTA)
+		      UINT2NUM(c_dqb->dqb_curbytes),
+#else
 		      UINT2NUM(c_dqb->dqb_curblocks),
+#endif
 		      UINT2NUM(c_dqb->dqb_ihardlimit),
 		      UINT2NUM(c_dqb->dqb_isoftlimit),
 		      UINT2NUM(c_dqb->dqb_curinodes),
@@ -479,6 +490,10 @@ Init_quota()
 #if defined(HAVE_LINUX_QUOTA_H)
   DQ_ALIAS(curspace, curblocks);
   DQ_ALIAS(curspace=, curblocks=);
+#endif
+#if defined(USE_MACOSX_QUOTA)
+  DQ_ALIAS(curbytes, curblocks);
+  DQ_ALIAS(curbytes=, curblocks=);
 #endif
 #undef DQ_ALIAS
 
