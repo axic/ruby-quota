@@ -7,6 +7,8 @@
 
 require "mkmf"
 
+have_header("unistd.h")
+
 have_header("linux/quota.h")       # for linux
 have_header("linux/types.h")
 have_header("sys/quota.h")

@@ -12,6 +12,10 @@
 
 #define RUBY_QUOTA_VERSION "0.6.0"
 
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 #ifdef HAVE_LINUX_QUOTA_H       /* for linux-2.4.x, 2.6.x */
 # define USE_LINUX_QUOTA
 #endif
