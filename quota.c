@@ -247,6 +247,7 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
     close(fd);
     return -1;
   };
+  close(fd);
 
   return 0; /* success */
 };
