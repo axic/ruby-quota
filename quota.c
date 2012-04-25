@@ -41,6 +41,8 @@
 #endif
 #ifdef HAVE_LINUX_QUOTA_H
 #  include <linux/quota.h>
+#  /* defined for 64bit quota fields */
+#  define USE_LINUX_QUOTA64 (LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,0))
 #  if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
 #    define dqblk if_dqblk
 #  else
@@ -275,8 +277,14 @@ rb_diskquota_get(VALUE dqb, struct dqblk * c_dqb)
 {
   VALUE v;
 
+#if defined(USE_LINUX_QUOTA64)
+#define GetMember(mem) \
+        ((v = rb_struct_getmember(dqb,rb_intern(mem))) == Qnil) ? 0 : (NUM2ULL(v))
+#else
 #define GetMember(mem) \
         ((v = rb_struct_getmember(dqb,rb_intern(mem))) == Qnil) ? 0 : (NUM2UINT(v))
+#endif
+
 #if defined(USE_LINUX_QUOTA)
   c_dqb->dqb_bhardlimit = GetMember("bhardlimit");
   c_dqb->dqb_bsoftlimit = GetMember("bsoftlimit");
@@ -321,7 +329,18 @@ rb_diskquota_new(struct dqblk *c_dqb)
 {
   VALUE dqb;
 
-#if defined(USE_LINUX_QUOTA)
+#if defined(USE_LINUX_QUOTA64)
+  dqb = rb_struct_new(rb_sDiskQuota,
+		      ULLT2NUM(c_dqb->dqb_bhardlimit),
+		      ULLT2NUM(c_dqb->dqb_bsoftlimit),
+		      ULLT2NUM(c_dqb->dqb_curspace),
+		      ULLT2NUM(c_dqb->dqb_ihardlimit),
+		      ULLT2NUM(c_dqb->dqb_isoftlimit),
+		      ULLT2NUM(c_dqb->dqb_curinodes),
+		      ULLT2NUM(c_dqb->dqb_btime),
+		      ULLT2NUM(c_dqb->dqb_itime),
+		      0);
+#elif defined(USE_LINUX_QUOTA)
   dqb = rb_struct_new(rb_sDiskQuota,
 		      UINT2NUM(c_dqb->dqb_bhardlimit),
 		      UINT2NUM(c_dqb->dqb_bsoftlimit),
