@@ -72,6 +72,13 @@
 #endif
 #endif
 
+/* XXX: bad workaround for Snow Leopard/Lion */
+#ifdef USE_MACOSX_QUOTA
+#include <sys/quota.h>
+#include <sys/mount.h>
+#define USE_BSD_QUOTA
+#endif
+
 /* XXX: Ruby 1.9 workaround */
 #ifndef STR2CSTR
 #define STR2CSTR(x) StringValuePtr(x)
