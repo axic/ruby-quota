@@ -38,10 +38,10 @@
 #endif
 #ifdef HAVE_LINUX_QUOTA_H
 #  include <linux/quota.h>
-#  define uid_t qid_t
 #  if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
 #    define dqblk if_dqblk
 #  else
+#    define uid_t qid_t
 #    define dqblk disk_dqblk
 #  endif
 #else
