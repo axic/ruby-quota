@@ -19,6 +19,9 @@
 #ifdef HAVE_LINUX_QUOTA_H       /* for linux-2.4.x, 2.6.x */
 # define USE_LINUX_QUOTA
 #endif
+#ifdef __linux__
+# define USE_LINUX_QUOTA        /* fallback for linux pre 2.4 */
+#endif
 #ifdef HAVE_SYS_FS_UFS_QUOTA_H  /* for Solaris-2.6,7,8 */
 # define USE_SOLARIS_QUOTA
 #endif
