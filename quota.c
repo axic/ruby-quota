@@ -255,7 +255,7 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
 };
 #endif
 
-void
+static void
 rb_diskquota_get(VALUE dqb, struct dqblk * c_dqb)
 {
   VALUE v;
@@ -301,7 +301,7 @@ rb_diskquota_get(VALUE dqb, struct dqblk * c_dqb)
 #undef GetMember
 };
 
-VALUE
+static VALUE
 rb_diskquota_new(struct dqblk *c_dqb)
 {
   VALUE dqb;
@@ -367,7 +367,7 @@ rb_quota_getquota(VALUE self, VALUE dev, VALUE uid)
   return dqb;
 };
 
-VALUE
+static VALUE
 rb_quota_quotaoff(VALUE self, VALUE dev)
 {
   char *c_dev = STR2CSTR(dev);
@@ -379,7 +379,7 @@ rb_quota_quotaoff(VALUE self, VALUE dev)
   return Qnil;
 };
 
-VALUE
+static VALUE
 rb_quota_quotaon(VALUE self, VALUE dev, VALUE quotas)
 {
   char *c_dev = STR2CSTR(dev);
@@ -392,7 +392,7 @@ rb_quota_quotaon(VALUE self, VALUE dev, VALUE quotas)
   return Qnil;
 };
 
-VALUE
+static VALUE
 rb_quota_setquota(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
 {
   char *c_dev = STR2CSTR(dev);
@@ -407,7 +407,7 @@ rb_quota_setquota(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
   return Qnil;
 };
 
-VALUE
+static VALUE
 rb_quota_setqlim(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
 {
 #ifdef Q_SETQLIM
@@ -429,7 +429,7 @@ rb_quota_setqlim(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
   return Qnil;
 };
 
-VALUE
+static VALUE
 rb_quota_sync(VALUE self, VALUE dev)
 {
   char *c_dev;
