@@ -482,7 +482,7 @@ Init_quota()
 				   "curinodes",
 				   "btimelimit",
 				   "itimelimit",
-				   0);
+				   NULL);
 
   /* for compatibility */
 #define DQ_ALIAS(a,b) rb_alias(rb_sDiskQuota,rb_intern(#a),rb_intern(#b))
