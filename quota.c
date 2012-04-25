@@ -331,14 +331,14 @@ rb_diskquota_new(struct dqblk *c_dqb)
 
 #if defined(USE_LINUX_QUOTA64)
   dqb = rb_struct_new(rb_sDiskQuota,
-		      ULLT2NUM(c_dqb->dqb_bhardlimit),
-		      ULLT2NUM(c_dqb->dqb_bsoftlimit),
-		      ULLT2NUM(c_dqb->dqb_curspace),
-		      ULLT2NUM(c_dqb->dqb_ihardlimit),
-		      ULLT2NUM(c_dqb->dqb_isoftlimit),
-		      ULLT2NUM(c_dqb->dqb_curinodes),
-		      ULLT2NUM(c_dqb->dqb_btime),
-		      ULLT2NUM(c_dqb->dqb_itime),
+		      ULL2NUM(c_dqb->dqb_bhardlimit),
+		      ULL2NUM(c_dqb->dqb_bsoftlimit),
+		      ULL2NUM(c_dqb->dqb_curspace),
+		      ULL2NUM(c_dqb->dqb_ihardlimit),
+		      ULL2NUM(c_dqb->dqb_isoftlimit),
+		      ULL2NUM(c_dqb->dqb_curinodes),
+		      ULL2NUM(c_dqb->dqb_btime),
+		      ULL2NUM(c_dqb->dqb_itime),
 		      0);
 #elif defined(USE_LINUX_QUOTA)
   dqb = rb_struct_new(rb_sDiskQuota,
