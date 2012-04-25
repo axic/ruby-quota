@@ -72,6 +72,11 @@
 #endif
 #endif
 
+/* XXX: Ruby 1.9 workaround */
+#ifndef STR2CSTR
+#define STR2CSTR(x) StringValuePtr(x)
+#endif
+
 static VALUE rb_mQuota;
 static VALUE rb_cUID_,  rb_cGroupID, rb_cUserID;
 static VALUE rb_sDiskQuota;
