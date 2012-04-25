@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name = %q{ruby-quota}
-  s.version = "0.6.5"
-  s.date = %q{2009-11-24}
-  s.authors = ["Takaaki Tateishi"]
+  s.version = "0.7.0"
+  s.date = %q{2012-04-25}
+  s.authors = ["Takaaki Tateishi, Alex Beregszaszi"]
   s.email = %q{ttate@jaist.ac.jp}
   s.summary = %q{Ruby-quota is a Ruby extension providing access to filesystem quota.}
   s.homepage = %q{http://ruby-quota.sf.net/}

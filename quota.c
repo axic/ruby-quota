@@ -10,7 +10,7 @@
 
 #include "ruby.h"
 
-#define RUBY_QUOTA_VERSION "0.6.5"
+#define RUBY_QUOTA_VERSION "0.7.0"
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
