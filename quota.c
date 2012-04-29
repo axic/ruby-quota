@@ -483,14 +483,7 @@ rb_quota_setuse(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
 static VALUE
 rb_quota_sync(VALUE self, VALUE dev)
 {
-  char *c_dev;
-
-  if( dev == Qnil ){
-    c_dev = NULL;
-  }
-  else{
-    c_dev = STR2CSTR(dev);
-  };
+  char *c_dev = (dev == Qnil) ? NULL : STR2CSTR(dev);
 
   if( rb_quotactl(Q_SYNC,c_dev,Qnil,NULL) == -1 ){ /* uid and addr are ignored */
     rb_sys_fail("quotactl");
