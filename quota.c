@@ -470,6 +470,17 @@ rb_quota_setqlim(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
 };
 
 static VALUE
+rb_quota_setuse(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
+{
+#ifdef Q_SETUSE
+  return __rb_quota_set(self,dev,uid,dqb,Q_SETUSE);
+#else
+  rb_raise(rb_eQuotaError, "the system don't have Q_SETUSE");
+#endif
+  return Qnil;
+};
+
+static VALUE
 rb_quota_sync(VALUE self, VALUE dev)
 {
   char *c_dev;
@@ -553,5 +564,6 @@ Init_quota()
   rb_define_module_function(rb_mQuota,"getquota",rb_quota_getquota,2);
   rb_define_module_function(rb_mQuota,"setquota",rb_quota_setquota,3);
   rb_define_module_function(rb_mQuota,"setqlim",rb_quota_setqlim,3);
+  rb_define_module_function(rb_mQuota,"setuse",rb_quota_setuse,3);
   rb_define_module_function(rb_mQuota,"sync",rb_quota_sync,1);
 };
