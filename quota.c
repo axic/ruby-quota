@@ -550,6 +550,8 @@ Init_quota()
 
   rb_define_const(rb_mQuota, "DiskQuota", rb_sDiskQuota);
 
+  rb_define_const(rb_mQuota, "BlockSize", UINT2NUM(BLOCK2BYTE(1)));
+
   rb_define_module_function(rb_mQuota,"quotaon",rb_quota_quotaon,2);
   rb_define_module_function(rb_mQuota,"quotaoff",rb_quota_quotaoff,1);
   rb_define_module_function(rb_mQuota,"getquota",rb_quota_getquota,2);
