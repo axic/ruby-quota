@@ -113,13 +113,13 @@ static uid_t
 rb_quota_uid(VALUE vuid)
 {
   return ((q_uid_data*)DATA_PTR(vuid))->uid;
-};
+}
 
 static void
 rb_quota_uid_free(q_uid_data *data)
 {
   if( data ) free(data);
-};
+}
 
 static VALUE
 rb_quota_uid_new(VALUE klass, uid_t uid)
@@ -131,7 +131,7 @@ rb_quota_uid_new(VALUE klass, uid_t uid)
   data->uid = uid;
 
   return obj;
-};
+}
 
 static VALUE
 rb_quota_uid_s_new(int argc, VALUE argv[], VALUE klass)
@@ -144,19 +144,19 @@ rb_quota_uid_s_new(int argc, VALUE argv[], VALUE klass)
   rb_obj_call_init(obj, argc, argv);
 
   return obj;
-};
+}
 
 static VALUE
 rb_quota_uid_initialize(int argc, VALUE argv[], VALUE self)
 {
   return Qnil;
-};
+}
 
 static VALUE
 rb_quota_uid_to_i(VALUE self)
 {
   return UINT2NUM(((q_uid_data*)DATA_PTR(self))->uid);
-};
+}
 
 static void
 get_uid(VALUE vuid, uid_t *uid, int *is_gid)
@@ -179,9 +179,8 @@ get_uid(VALUE vuid, uid_t *uid, int *is_gid)
   }
   else{
     rb_raise(rb_eTypeError, "An uid or gid is expected.");
-  };
-};
-
+  }
+}
 
 #if defined(USE_LINUX_QUOTA) /* for Linux */
 static int
@@ -199,8 +198,8 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
   }
   else{
     return quotactl(QCMD(cmd,USRQUOTA),dev,(uid_t)uid,addr);
-  };
-};
+  }
+}
 #elif defined(USE_BSD_QUOTA) /* for *BSD */
 static int
 rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
@@ -214,7 +213,7 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
   struct statfs *buff;
 #endif
   int i, count, ret;
-  
+
   buff = 0;
   path = dev;
   count = getmntinfo(&buff, MNT_WAIT);
@@ -222,8 +221,8 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
     if( strcmp(buff[i].f_mntfromname, dev) == 0 ){
       path = buff[i].f_mntonname;
       break;
-    };
-  };
+    }
+  }
 
   get_uid(vuid, &uid, &is_gid);
   if( is_gid ){
@@ -231,11 +230,11 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
   }
   else{
     ret = quotactl(path,QCMD(cmd,USRQUOTA),uid,addr);
-  };
+  }
   /* if( buff ) free(buff); */
 
   return ret;
-};
+}
 #elif defined(USE_SOLARIS_QUOTA) /* for Solaris */
 static int
 rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
@@ -265,22 +264,22 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
     }
     else{
       fd = open("/",O_RDWR); /* maybe is it ignored anyways? */
-    };
+    }
     break;
   default:
     return -1;
   }
   if( fd < 0 ){
     return -1;
-  };
+  }
   if( ioctl(fd,Q_QUOTACTL,&qctl) == -1 ){
     close(fd);
     return -1;
-  };
+  }
   close(fd);
 
   return 0; /* success */
-};
+}
 #endif
 
 static void
@@ -333,7 +332,7 @@ rb_diskquota_get(VALUE dqb, struct dqblk * c_dqb)
   c_dqb->dqb_ftimelimit = GetMember("itimelimit");
 #endif
 #undef GetMember
-};
+}
 
 static VALUE
 rb_diskquota_new(struct dqblk *c_dqb)
@@ -394,7 +393,7 @@ rb_diskquota_new(struct dqblk *c_dqb)
 		      0);
 #endif
   return dqb;
-};
+}
 
 static VALUE
 rb_quota_getquota(VALUE self, VALUE dev, VALUE uid)
@@ -405,12 +404,12 @@ rb_quota_getquota(VALUE self, VALUE dev, VALUE uid)
 
   if( rb_quotactl(Q_GETQUOTA,c_dev,uid,(caddr_t)(&c_dqb)) == -1 ){
     rb_sys_fail("quotactl");
-  };
+  }
 
   dqb = rb_diskquota_new(&c_dqb);
 
   return dqb;
-};
+}
 
 static VALUE
 rb_quota_quotaoff(VALUE self, VALUE dev)
@@ -419,10 +418,10 @@ rb_quota_quotaoff(VALUE self, VALUE dev)
 
   if( rb_quotactl(Q_QUOTAOFF,c_dev,Qnil,NULL) == -1 ){
     rb_sys_fail("quotactl");
-  };
+  }
 
   return Qnil;
-};
+}
 
 static VALUE
 rb_quota_quotaon(VALUE self, VALUE dev, VALUE quotas)
@@ -432,10 +431,10 @@ rb_quota_quotaon(VALUE self, VALUE dev, VALUE quotas)
 
   if( rb_quotactl(Q_QUOTAON,c_dev,Qnil,(caddr_t)c_quotas) == -1 ){
     rb_sys_fail("quotactl");
-  };
+  }
 
   return Qnil;
-};
+}
 
 static VALUE
 __rb_quota_set(VALUE self, VALUE dev, VALUE uid, VALUE dqb, int cmd)
@@ -447,7 +446,7 @@ __rb_quota_set(VALUE self, VALUE dev, VALUE uid, VALUE dqb, int cmd)
 
   if( rb_quotactl(cmd,c_dev,uid,(caddr_t)(&c_dqb)) == -1 ){
     rb_sys_fail("quotactl");
-  };
+  }
 
   return Qnil;
 }
@@ -456,7 +455,7 @@ static VALUE
 rb_quota_setquota(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
 {
   return __rb_quota_set(self,dev,uid,dqb,Q_SETQUOTA);
-};
+}
 
 static VALUE
 rb_quota_setqlim(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
@@ -467,7 +466,7 @@ rb_quota_setqlim(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
   rb_raise(rb_eQuotaError, "the system don't have Q_SETQLIM");
 #endif
   return Qnil;
-};
+}
 
 static VALUE
 rb_quota_setuse(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
@@ -478,7 +477,7 @@ rb_quota_setuse(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
   rb_raise(rb_eQuotaError, "the system don't have Q_SETUSE");
 #endif
   return Qnil;
-};
+}
 
 static VALUE
 rb_quota_sync(VALUE self, VALUE dev)
@@ -487,10 +486,10 @@ rb_quota_sync(VALUE self, VALUE dev)
 
   if( rb_quotactl(Q_SYNC,c_dev,Qnil,NULL) == -1 ){ /* uid and addr are ignored */
     rb_sys_fail("quotactl");
-  };
+  }
 
   return Qnil;
-};
+}
 
 void
 Init_quota()
@@ -559,4 +558,4 @@ Init_quota()
   rb_define_module_function(rb_mQuota,"setqlim",rb_quota_setqlim,3);
   rb_define_module_function(rb_mQuota,"setuse",rb_quota_setuse,3);
   rb_define_module_function(rb_mQuota,"sync",rb_quota_sync,1);
-};
+}
