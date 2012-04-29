@@ -46,12 +46,21 @@
 #else
 #  include <sys/quota.h>
 #endif
+
+#ifndef QIF_DQBLKSIZE /* The change happened midway through 2.6 */
+#  define QIF_DQBLKSIZE QUOTABLOCK_SIZE
+#endif
+#define BLOCK2BYTE(x)	((x) * QIF_DQBLKSIZE)
+#define BYTE2BLOCK(x)	((x) / QIF_DQBLKSIZE)
 #endif /* USE_LINUX_QUOTA */
 
 #ifdef USE_SOLARIS_QUOTA
 #include <sys/types.h>
 #include <sys/fcntl.h>
 #include <sys/fs/ufs_quota.h>
+
+#define BYTE2BLOCK(x)	btodb(x)
+#define BLOCK2BYTE(X)	dbtob(x)
 #endif
 
 #ifdef USE_BSD_QUOTA
@@ -69,6 +78,9 @@
 #    define dqblk ufs_dqblk
 #  endif
 #endif
+
+#define BYTE2BLOCK(x)	btodb(x)
+#define BLOCK2BYTE(X)	dbtob(x)
 #endif
 
 /* XXX: bad workaround for Snow Leopard/Lion */
@@ -76,6 +88,10 @@
 #include <sys/quota.h>
 #include <sys/mount.h>
 #define USE_BSD_QUOTA
+
+// blocksize 1
+#define BYTE2BLOCK(x)	(x)
+#define BLOCK2BYTE(x)	(x)
 #endif
 
 /* XXX: Ruby 1.9 workaround */
