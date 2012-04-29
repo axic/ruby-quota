@@ -1,11 +1,5 @@
-/* -*- C -*-
- * $Id: quota.c,v 1.3 2004/08/25 16:27:50 ttate Exp $
- * Copyright (C) 2000,2001,2002,2003,2004 Takaaki Tateishi <ttate@ttsky.net>
- */
-
 /*
- * TODO:
- * - should use the allocation framework of ruby-1.8.x.
+ * Copyright (C) 2000,2001,2002,2003,2004 Takaaki Tateishi <ttate@ttsky.net>
  */
 
 #include "ruby.h"

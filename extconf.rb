@@ -1,9 +1,8 @@
 #
 # extconf.rb
 #
-# Resource
 # Copyright (C) 2000 by Takaaki Tateishi <ttate@jaist.ac.jp>
-# $Id: extconf.rb,v 1.1 2002/11/12 05:43:18 ttate Exp $
+#
 
 require "mkmf"
 
