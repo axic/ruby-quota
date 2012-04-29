@@ -438,36 +438,31 @@ rb_quota_quotaon(VALUE self, VALUE dev, VALUE quotas)
 };
 
 static VALUE
-rb_quota_setquota(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
+__rb_quota_set(VALUE self, VALUE dev, VALUE uid, VALUE dqb, int cmd)
 {
   char *c_dev = STR2CSTR(dev);
   struct dqblk c_dqb;
 
   rb_diskquota_get(dqb, &c_dqb);
 
-  if( rb_quotactl(Q_SETQUOTA,c_dev,uid,(caddr_t)(&c_dqb)) == -1 ){
+  if( rb_quotactl(cmd,c_dev,uid,(caddr_t)(&c_dqb)) == -1 ){
     rb_sys_fail("quotactl");
   };
 
   return Qnil;
+}
+
+static VALUE
+rb_quota_setquota(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
+{
+  return __rb_quota_set(self,dev,uid,dqb,Q_SETQUOTA);
 };
 
 static VALUE
 rb_quota_setqlim(VALUE self, VALUE dev, VALUE uid, VALUE dqb)
 {
 #ifdef Q_SETQLIM
-  char *c_dev = STR2CSTR(dev);
-  struct dqblk c_dqb;
-
-  rb_diskquota_get(dqb, &c_dqb);
-
-  if( rb_quotactl(Q_SETQLIM,c_dev,uid,(caddr_t)(&c_dqb)) == -1 ){
-    rb_sys_fail("quotactl");
-  };
-
-#ifdef DEBUG
-  printf("bhardlimit = %d\n",c_dqb.dqb_bhardlimit);
-#endif
+  return __rb_quota_set(self,dev,uid,dqb,Q_SETQLIM);
 #else
   rb_raise(rb_eQuotaError, "the system don't have Q_SETQLIM");
 #endif
