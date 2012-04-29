@@ -258,19 +258,16 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
 {
   int is_gid;
   uid_t uid;
-  int ret;
 
   dev = __getdevice(dev);
 
   get_uid(vuid, &uid, &is_gid);
   if( is_gid ){
-    ret = quotactl(dev,QCMD(cmd,GRPQUOTA),uid,addr);
+    return quotactl(dev,QCMD(cmd,GRPQUOTA),uid,addr);
   }
   else{
-    ret = quotactl(dev,QCMD(cmd,USRQUOTA),uid,addr);
+    return quotactl(dev,QCMD(cmd,USRQUOTA),uid,addr);
   }
-
-  return ret;
 }
 #elif defined(USE_SOLARIS_QUOTA) /* for Solaris */
 static int
