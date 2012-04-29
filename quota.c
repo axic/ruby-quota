@@ -204,7 +204,6 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
 static int
 rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
 {
-  char *path;
   int is_gid;
   uid_t uid;
 #if defined(HAVE_SYS_STATVFS_H) && defined(__NetBSD__)
@@ -215,21 +214,20 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
   int i, count, ret;
 
   buff = 0;
-  path = dev;
   count = getmntinfo(&buff, MNT_WAIT);
   for( i=0; i<count; i++ ){
     if( strcmp(buff[i].f_mntfromname, dev) == 0 ){
-      path = buff[i].f_mntonname;
+      dev = buff[i].f_mntonname;
       break;
     }
   }
 
   get_uid(vuid, &uid, &is_gid);
   if( is_gid ){
-    ret = quotactl(path,QCMD(cmd,GRPQUOTA),uid,addr);
+    ret = quotactl(dev,QCMD(cmd,GRPQUOTA),uid,addr);
   }
   else{
-    ret = quotactl(path,QCMD(cmd,USRQUOTA),uid,addr);
+    ret = quotactl(dev,QCMD(cmd,USRQUOTA),uid,addr);
   }
   /* if( buff ) free(buff); */
 
