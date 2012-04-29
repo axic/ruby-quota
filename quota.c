@@ -182,6 +182,30 @@ get_uid(VALUE vuid, uid_t *uid, int *is_gid)
   }
 }
 
+static char *
+__getdevice(char *dev)
+{
+#if defined(USE_BSD_QUOTA)
+#if defined(HAVE_SYS_STATVFS_H) && defined(__NetBSD__)
+  struct statvfs *buff;
+#else
+  struct statfs *buff;
+#endif
+  int i, count;
+
+  buff = 0;
+  count = getmntinfo(&buff, MNT_WAIT);
+  for( i=0; i<count; i++ ){
+    if( strcmp(buff[i].f_mntfromname, dev) == 0 ){
+      dev = buff[i].f_mntonname;
+      break;
+    }
+  }
+#endif
+
+  return dev;
+}
+
 #if defined(USE_LINUX_QUOTA) /* for Linux */
 static int
 rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
@@ -206,21 +230,9 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
 {
   int is_gid;
   uid_t uid;
-#if defined(HAVE_SYS_STATVFS_H) && defined(__NetBSD__)
-  struct statvfs *buff;
-#else
-  struct statfs *buff;
-#endif
-  int i, count, ret;
+  int ret;
 
-  buff = 0;
-  count = getmntinfo(&buff, MNT_WAIT);
-  for( i=0; i<count; i++ ){
-    if( strcmp(buff[i].f_mntfromname, dev) == 0 ){
-      dev = buff[i].f_mntonname;
-      break;
-    }
-  }
+  dev = __getdevice(dev);
 
   get_uid(vuid, &uid, &is_gid);
   if( is_gid ){
@@ -229,7 +241,6 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
   else{
     ret = quotactl(dev,QCMD(cmd,USRQUOTA),uid,addr);
   }
-  /* if( buff ) free(buff); */
 
   return ret;
 }
