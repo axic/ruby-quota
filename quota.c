@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2000,2001,2002,2003,2004 Takaaki Tateishi <ttate@ttsky.net>
+ * Copyright (C) 2009-2012 Alex Beregszaszi
  */
 
 #include "ruby.h"
