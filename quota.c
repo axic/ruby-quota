@@ -34,6 +34,8 @@
 #else
 #  include <sys/types.h>
 #endif
+#include <mntent.h>
+#include <sys/stat.h>
 #ifdef HAVE_LINUX_QUOTA_H
 #  include <linux/quota.h>
 #  /* defined for 64bit quota fields */
@@ -185,7 +187,31 @@ get_uid(VALUE vuid, uid_t *uid, int *is_gid)
 static char *
 __getdevice(char *dev)
 {
-#if defined(USE_BSD_QUOTA)
+#if defined(USE_LINUX_QUOTA)
+  FILE *f;
+
+  f = setmntent("/proc/mounts", "r");
+  if (f) {
+    struct mntent *e;
+    struct stat buf;
+
+    while (e = getmntent(f)) {
+      //printf("%s -> %s\n", e->mnt_dir, e->mnt_fsname);
+      if (!strcmp(e->mnt_dir, dev)) {
+        struct stat buf;
+
+        /* needed as modern Linux's will have generic entries first */
+        /* such as rootfs -> / */
+        if (!stat(e->mnt_fsname, &buf) && S_ISBLK(buf.st_mode)) {
+          dev = e->mnt_fsname;
+          break;
+        }
+      }
+    }
+
+    endmntent(f);
+  }
+#elif defined(USE_BSD_QUOTA)
 #if defined(HAVE_SYS_STATVFS_H) && defined(__NetBSD__)
   struct statvfs *buff;
 #else
@@ -212,6 +238,8 @@ rb_quotactl(int cmd, char *dev, VALUE vuid, caddr_t addr)
 {
   int is_gid;
   uid_t uid;
+
+  dev = __getdevice(dev);
 
   get_uid(vuid, &uid, &is_gid);
 #ifdef DEBUG
