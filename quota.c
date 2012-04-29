@@ -61,7 +61,7 @@
 #include <sys/fs/ufs_quota.h>
 
 #define BYTE2BLOCK(x)	btodb(x)
-#define BLOCK2BYTE(X)	dbtob(x)
+#define BLOCK2BYTE(x)	dbtob(x)
 #endif
 
 #ifdef USE_BSD_QUOTA
@@ -81,7 +81,7 @@
 #endif
 
 #define BYTE2BLOCK(x)	btodb(x)
-#define BLOCK2BYTE(X)	dbtob(x)
+#define BLOCK2BYTE(x)	dbtob(x)
 #endif
 
 /* XXX: bad workaround for Snow Leopard/Lion */
