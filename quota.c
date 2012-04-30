@@ -30,24 +30,41 @@
 #ifdef USE_LINUX_QUOTA
 #include <linux/version.h>
 #ifdef HAVE_LINUX_TYPES_H
-#  include <linux/types.h>
+#  if RHEL_MAJOR == 5
+#    include <sys/types.h>
+#  else
+#    include <linux/types.h>
+#  endif
 #else
 #  include <sys/types.h>
 #endif
 #include <mntent.h>
 #include <sys/stat.h>
 #ifdef HAVE_LINUX_QUOTA_H
-#  include <linux/quota.h>
+#  if RHEL_MAJOR == 5
+#    include <sys/quota.h>
+#  else
+#    include <linux/quota.h>
+#  endif
 #  /* defined for 64bit quota fields */
 #  define USE_LINUX_QUOTA64 (LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,0))
 #  if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
-#    define dqblk if_dqblk
+#    if RHEL_MAJOR != 5
+#      define dqblk if_dqblk
+#    endif
 #  else
 #    define uid_t qid_t
 #    define dqblk disk_dqblk
 #  endif
 #else
 #  include <sys/quota.h>
+#endif
+
+#if RHEL_MAJOR == 5
+/* from CentOS 5.8 <linux/quota.h> */
+/* Size of blocks in which are counted size limits */
+#  define QUOTABLOCK_BITS 10
+#  define QUOTABLOCK_SIZE (1 << QUOTABLOCK_BITS)
 #endif
 
 #ifndef QIF_DQBLKSIZE /* The change happened midway through 2.6 */
