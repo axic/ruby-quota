@@ -66,6 +66,12 @@
 
 #endif
 
+/* In 2.4.22 the curblocks field was renamed to curspace */
+/* FIXME: should use extconf to determine this */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,4,22)
+#define USE_LINUX_CURBLOCKS
+#endif
+
 #endif /* USE_LINUX_QUOTA */
 
 #ifdef USE_SOLARIS_QUOTA
@@ -343,7 +349,7 @@ rb_diskquota_get(VALUE dqb, struct dqblk * c_dqb)
 #if defined(USE_LINUX_QUOTA)
   c_dqb->dqb_bhardlimit = GetMember("bhardlimit");
   c_dqb->dqb_bsoftlimit = GetMember("bsoftlimit");
-#if defined(HAVE_LINUX_QUOTA_H)
+#if !defined(USE_LINUX_CURBLOCKS)
   c_dqb->dqb_curspace   = GetMember("curspace");
 #else
   c_dqb->dqb_curblocks  = GetMember("curblocks");
@@ -399,7 +405,7 @@ rb_diskquota_new(struct dqblk *c_dqb)
   dqb = rb_struct_new(rb_sDiskQuota,
 		      UINT2NUM(c_dqb->dqb_bhardlimit),
 		      UINT2NUM(c_dqb->dqb_bsoftlimit),
-#if defined(HAVE_LINUX_QUOTA_H)
+#if !defined(USE_LINUX_CURBLOCKS)
 		      UINT2NUM(c_dqb->dqb_curspace),
 #else
 		      UINT2NUM(c_dqb->dqb_curblocks),
@@ -582,7 +588,7 @@ Init_quota()
   DQ_ALIAS(fsoftlimit=, isoftlimit=);
   DQ_ALIAS(curfiles=,   curinodes=);
   DQ_ALIAS(ftimelimit=, itimelimit=);
-#if defined(HAVE_LINUX_QUOTA_H)
+#if !defined(USE_LINUX_CURBLOCKS)
   DQ_ALIAS(curspace, curblocks);
   DQ_ALIAS(curspace=, curblocks=);
 #endif
