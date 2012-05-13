@@ -8,7 +8,11 @@ require "mkmf"
 
 have_header("unistd.h")
 
-have_header("linux/quota.h")       # for linux
+# ensure we do not enable the known broken version:
+# http://lkml.indiana.edu/hypermail/linux/kernel/0705.0/1234.html
+if try_link("#include <ruby.h>\n#include <linux/quota.h>\nvoid main() {}")
+  have_header("linux/quota.h")       # for linux
+end
 have_header("linux/types.h")
 have_header("sys/quota.h")
 have_header("sys/types.h")
