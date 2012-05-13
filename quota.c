@@ -50,11 +50,22 @@
 #  include <sys/quota.h>
 #endif
 
+/* FIXME: there must be a more sophisticated way for this (hint: use extconf's have_macro) */
+#if defined(dbtob) && defined(btodb)
+
+#define BYTE2BLOCK(x)	btodb(x)
+#define BLOCK2BYTE(x)	dbtob(x)
+
+#else
+
 #ifndef QIF_DQBLKSIZE /* The change happened midway through 2.6 */
 #  define QIF_DQBLKSIZE QUOTABLOCK_SIZE
 #endif
-#define BLOCK2BYTE(x)	((x) * QIF_DQBLKSIZE)
 #define BYTE2BLOCK(x)	((x) / QIF_DQBLKSIZE)
+#define BLOCK2BYTE(x)	((x) * QIF_DQBLKSIZE)
+
+#endif
+
 #endif /* USE_LINUX_QUOTA */
 
 #ifdef USE_SOLARIS_QUOTA
