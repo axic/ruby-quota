@@ -31,8 +31,8 @@ Quota.quotaon(dev, quotas)
 Quota.quotaoff(dev)
 Quota.getquota(dev, uid)
 Quota.setquota(dev, uid, dq)
-Quota.setqlim(dev, uid, dq) # *BSD does not have this function.
-Quota.setuse(dev, uid, dq)  # only *BSD has this
+Quota.setlimit(dev, uid, dq) # Not all systems
+Quota.setusage(dev, uid, dq) # may support this
 Quota.sync(dev)
 
   * 'dev' is a device file or a mount point (e.g. /dev/hda0, /mnt/foo). On *

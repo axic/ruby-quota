@@ -602,11 +602,14 @@ Init_quota()
 
   rb_define_const(rb_mQuota, "BlockSize", UINT2NUM(BLOCK2BYTE(1)));
 
-  rb_define_module_function(rb_mQuota,"quotaon",rb_quota_quotaon,2);
-  rb_define_module_function(rb_mQuota,"quotaoff",rb_quota_quotaoff,1);
-  rb_define_module_function(rb_mQuota,"getquota",rb_quota_getquota,2);
-  rb_define_module_function(rb_mQuota,"setquota",rb_quota_setquota,3);
-  rb_define_module_function(rb_mQuota,"setqlim",rb_quota_setqlim,3);
-  rb_define_module_function(rb_mQuota,"setuse",rb_quota_setuse,3);
-  rb_define_module_function(rb_mQuota,"sync",rb_quota_sync,1);
+  rb_define_module_function(rb_mQuota, "quotaon",  rb_quota_quotaon,  2);
+  rb_define_module_function(rb_mQuota, "quotaoff", rb_quota_quotaoff, 1);
+  rb_define_module_function(rb_mQuota, "getquota", rb_quota_getquota, 2);
+  rb_define_module_function(rb_mQuota, "setquota", rb_quota_setquota, 3);
+  rb_define_module_function(rb_mQuota, "setqlim",  rb_quota_setqlim,  3);
+  rb_define_module_function(rb_mQuota, "setuse",   rb_quota_setuse,   3);
+  rb_define_module_function(rb_mQuota, "sync",     rb_quota_sync,     1);
+
+  rb_alias(CLASS_OF(rb_mQuota), rb_intern("setlimit"), rb_intern("setqlim"));
+  rb_alias(CLASS_OF(rb_mQuota), rb_intern("setusage"), rb_intern("setuse"));
 }
