@@ -8,5 +8,5 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/axic/ruby-quota}
   s.description = %q{Ruby-quota is a Ruby extension providing access to filesystem quota. Supported systems Linux, FreeBSD, NetBSD, Dragonfly BSD, Solaris and Mac OS X.}
   s.extensions = [ "extconf.rb" ]
-  s.files = [ "COPYING", "README", "MANIFEST", "ChangeLog", "test.rb", "extconf.rb", "quota.c"]
+  s.files = [ "COPYING", "README.md", "MANIFEST", "ChangeLog", "test.rb", "extconf.rb", "quota.c"]
 end

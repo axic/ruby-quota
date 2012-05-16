@@ -1,6 +1,6 @@
 COPYING
 MANIFEST
-README
+README.md
 extconf.rb
 quota.c
 test.rb
