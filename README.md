@@ -56,3 +56,5 @@ Functions:
 * `Quota::UserID.new(id)` or `Quota::UserID[id]` to create a new uid object.
 
 * `Quota::GroupID.new(id)` or `Quota::GroupID[id]` to create a new gid object.
+
+* `Quota::DiskQuota.new` to create a new DiskQuota structure.
