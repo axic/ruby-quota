@@ -66,3 +66,84 @@ Constants:
    converting between quota blocks count and bytes.
 
 * `Quota::VERSION` (string), version of Ruby/Quota.
+
+
+DiskQuota fields
+----------------
+
+The field names depend on underlying system used, but appropriate aliases and
+mappings are provided.
+
+Preferred generic field names:
+* `bhardlimit`	- hard limit in blocks
+* `bsoftlimit`	- soft limit in blocks
+* `curblocks`	- current usage in blocks
+* `ihardlimit`	- hard limit in inodes (~files)
+* `isoftlimit`	- soft limit in inodes (~files)
+* `curinodes`	- current usage in inodes (~files)
+* `btimelimit`	- grace period for over the soft limit of blocks
+* `itimelimit`	- grace period for over the soft limit of inodes
+
+Aliases:
+* `btimelimit`  <>  `btime`
+* `itimelimit`  <>  `itime`
+* `curinodes`   <>  `curfiles`
+* `curblocks`   <>  `curspace`
+* `curblocks`   <>  `curbytes`
+* `ihardlimit`  <>  `fhardlimit`
+* `isoftlimit`  <>  `fsoftlimit`
+* `itimelimit`  <>  `ftimelimit`
+
+
+Underlying quota field names on different systems
+-------------------------------------------------
+
+BSD:
+* `bhardlimit`
+* `bsoftlimit`
+* `curblocks`
+* `ihardlimit`
+* `isoftlimit`
+* `curinodes`
+* `btime`
+* `itime`
+
+Linux:
+* `bhardlimit`
+* `bsoftlimit`
+* `curspace`
+* `ihardlimit`
+* `isoftlimit`
+* `curinodes`
+* `btime`
+* `itime`
+
+Linux <2.4.22:
+* `bhardlimit`
+* `bsoftlimit`
+* `curblocks`
+* `ihardlimit`
+* `isoftlimit`
+* `curinodes`
+* `btime`
+* `itime`
+
+Solaris:
+* `bhardlimit`
+* `bsoftlimit`
+* `curblocks`
+* `fhardlimit`
+* `fsoftlimit`
+* `curfiles`
+* `btimelimit`
+* `ftimelimit`
+
+Mac OS X:
+* `bhardlimit`
+* `bsoftlimit`
+* `curbytes`
+* `ihardlimit`
+* `isoftlimit`
+* `curinodes`
+* `btime`
+* `itime`
