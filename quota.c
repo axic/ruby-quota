@@ -592,14 +592,10 @@ Init_quota()
   DQ_ALIAS(btime=,      btimelimit=);
   DQ_ALIAS(itime,       itimelimit);
   DQ_ALIAS(itime=,      itimelimit=);
-#if !defined(USE_LINUX_CURBLOCKS)
-  DQ_ALIAS(curspace, curblocks);
-  DQ_ALIAS(curspace=, curblocks=);
-#endif
-#if defined(USE_MACOSX_QUOTA)
-  DQ_ALIAS(curbytes, curblocks);
-  DQ_ALIAS(curbytes=, curblocks=);
-#endif
+  DQ_ALIAS(curspace,    curblocks);
+  DQ_ALIAS(curspace=,   curblocks=);
+  DQ_ALIAS(curbytes,    curblocks);
+  DQ_ALIAS(curbytes=,   curblocks=);
 #undef DQ_ALIAS
 
   rb_define_const(rb_mQuota, "DiskQuota", rb_sDiskQuota);
