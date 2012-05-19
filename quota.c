@@ -363,7 +363,7 @@ rb_diskquota_get(VALUE dqb, struct dqblk * c_dqb)
   c_dqb->dqb_bhardlimit = GetMember("bhardlimit");
   c_dqb->dqb_bsoftlimit = GetMember("bsoftlimit");
 #if defined(USE_MACOSX_QUOTA)
-  c_dqb->dqb_curbytes  = GetMember("curbytes");
+  c_dqb->dqb_curbytes   = GetMember("curbytes");
 #else
   c_dqb->dqb_curblocks  = GetMember("curblocks");
 #endif
@@ -580,13 +580,13 @@ Init_quota()
 
   /* for compatibility */
 #define DQ_ALIAS(a,b) rb_alias(rb_sDiskQuota,rb_intern(#a),rb_intern(#b))
-  DQ_ALIAS(fhardlimit, ihardlimit);
-  DQ_ALIAS(fsoftlimit, isoftlimit);
-  DQ_ALIAS(curfiles,   curinodes);
-  DQ_ALIAS(ftimelimit, itimelimit);
+  DQ_ALIAS(fhardlimit,  ihardlimit);
   DQ_ALIAS(fhardlimit=, ihardlimit=);
+  DQ_ALIAS(fsoftlimit,  isoftlimit);
   DQ_ALIAS(fsoftlimit=, isoftlimit=);
+  DQ_ALIAS(curfiles,    curinodes);
   DQ_ALIAS(curfiles=,   curinodes=);
+  DQ_ALIAS(ftimelimit,  itimelimit);
   DQ_ALIAS(ftimelimit=, itimelimit=);
 #if !defined(USE_LINUX_CURBLOCKS)
   DQ_ALIAS(curspace, curblocks);
