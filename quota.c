@@ -588,6 +588,10 @@ Init_quota()
   DQ_ALIAS(curfiles=,   curinodes=);
   DQ_ALIAS(ftimelimit,  itimelimit);
   DQ_ALIAS(ftimelimit=, itimelimit=);
+  DQ_ALIAS(btime,       btimelimit);
+  DQ_ALIAS(btime=,      btimelimit=);
+  DQ_ALIAS(itime,       itimelimit);
+  DQ_ALIAS(itime=,      itimelimit=);
 #if !defined(USE_LINUX_CURBLOCKS)
   DQ_ALIAS(curspace, curblocks);
   DQ_ALIAS(curspace=, curblocks=);
