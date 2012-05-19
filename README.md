@@ -58,3 +58,11 @@ Functions:
 * `Quota::GroupID.new(id)` or `Quota::GroupID[id]` to create a new gid object.
 
 * `Quota::DiskQuota.new` to create a new DiskQuota structure.
+
+
+Constants:
+
+* `Quota::BlockSize` (number), quota block size on the given system. Can be used for
+   converting between quota blocks count and bytes.
+
+* `Quota::VERSION` (string), version of Ruby/Quota.
