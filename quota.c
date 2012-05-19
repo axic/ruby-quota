@@ -116,7 +116,7 @@
 
 /* XXX: Ruby 1.9 workaround */
 #ifndef STR2CSTR
-#define STR2CSTR(x) StringValuePtr(x)
+#define STR2CSTR(x) StringValueCStr(x)
 #endif
 
 static VALUE rb_mQuota;
