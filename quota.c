@@ -431,7 +431,7 @@ rb_diskquota_new(struct dqblk *c_dqb)
 		      UINT2NUM(c_dqb->dqb_btime),
 		      UINT2NUM(c_dqb->dqb_itime),
 		      0);
-#elif defined(USE_SOLARIS)
+#elif defined(USE_SOLARIS_QUOTA)
   dqb = rb_struct_new(rb_sDiskQuota,
 		      UINT2NUM(c_dqb->dqb_bhardlimit),
 		      UINT2NUM(c_dqb->dqb_bsoftlimit),
