@@ -363,7 +363,7 @@ rb_diskquota_get(VALUE dqb, struct dqblk * c_dqb)
   c_dqb->dqb_bhardlimit = GetMember("bhardlimit");
   c_dqb->dqb_bsoftlimit = GetMember("bsoftlimit");
 #if defined(USE_MACOSX_QUOTA)
-  c_dqb->dqb_curbytes   = GetMember("curbytes");
+  c_dqb->dqb_curbytes   = GetMember("curblocks");
 #else
   c_dqb->dqb_curblocks  = GetMember("curblocks");
 #endif
